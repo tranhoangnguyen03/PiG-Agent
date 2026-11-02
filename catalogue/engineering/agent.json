@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "engineering",
+  "name": "Engineering consultant B",
+  "status": "reference-prototype",
+  "description": "Independent Engineering consultant for review, debugging, design, and verification.",
+  "referenceVersion": "0.1.0-preview.1",
+  "source": {
+    "repository": "https://github.com/tranhoangnguyen03/pi-consultants",
+    "headCommit": "752a579af69ac9e8020450e72704fefabfe0c674",
+    "buildCheckout": "df5ee250e93266a04c34b2352218071e77c94dbc",
+    "tree": "31860ddf1dfa2dd92e388a5fbe1bbe54a10d2afe",
+    "definition": "firm/independent/engineering.json",
+    "builder": "firm/independent/build.mjs",
+    "runtimeLock": "firm/independent/runtime-lock.json",
+    "packageLock": "firm/independent/packages/package-lock.json"
+  },
+  "runtime": {
+    "engine": "PiG",
+    "engineVersion": "0.5.3",
+    "nodeVersion": "24.15.0"
+  },
+  "prototype": {
+    "defaultHome": "~/.pi-consultants/engineering",
+    "sessionPathFromHome": ".hq/sessions",
+    "accountPathFromHome": ".pi",
+    "statePathFromHome": ".hq",
+    "testedNativeTargets": ["darwin-arm64", "darwin-x64", "linux-x64"],
+    "buildRun": "https://github.com/tranhoangnguyen03/pi-consultants/actions/runs/41391266169",
+    "verificationRun": "https://github.com/tranhoangnguyen03/pi-consultants/actions/runs/41391266336",
+    "previewArtifactsExpire": "2026-11-16"
+  },
+  "catalogueRelease": null,
+  "desktopInstaller": null,
+  "privateSetupImport": null
+}
