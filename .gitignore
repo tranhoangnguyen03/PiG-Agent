@@ -1,0 +1,10 @@
+dist/
+node_modules/
+.cache/
+.env
+.env.*
+!.env.example
+private/
+local/
+*.personal-agent
+.DS_Store
