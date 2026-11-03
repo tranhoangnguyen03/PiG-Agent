@@ -2,6 +2,8 @@
 
 Status: plan, not completed implementation. Start with Engineering B because its independent runtime has already been built and exercised. Prove one whole installation journey before adding a shared catalogue app or several agents.
 
+The product contract is generic. B is a source of tested packaging work, not the template every agent must follow. Use the [generic reviewer and file layout](FILES-AND-SESSIONS.md) to define source/resource/private paths. No generic packager code should require HQ, a case system, or B's `.hq/sessions` path.
+
 ## 1. Qualify the existing runtime as a curated package
 
 - Pin the Engineering source, PiG, Node, and package graph using the [reference entry](../catalogue/engineering/README.md).
@@ -11,7 +13,7 @@ Status: plan, not completed implementation. Start with Engineering B because its
 - Enforce the chosen project-settings and append-prompt policy. PiG 0.5.3 has project trust controls; verify that project instructions still load while an unrelated `.pi/settings.json` or `APPEND_SYSTEM.md` cannot replace the agent's runtime setup.
 - Inventory all extension state paths and external dependencies. Preserve full asset trees. Identify any tool still using a global browser profile, cache, or account store.
 
-Acceptance: the relocated package runs on a clean target without a preinstalled Pi or Node; its required accounts and remaining host tools are explicit; normal disabled features do not show startup failures.
+Acceptance: the relocated package runs on a clean target without a preinstalled Pi or Node. It supplies all local tools needed for core work through the download or supported install flow. Account requirements are explicit; extra manual setup belongs only to optional features. Disabled features do not show startup failures.
 
 ## 2. Complete one desktop journey
 
@@ -20,6 +22,8 @@ Start with macOS and keep the existing terminal UI. Build a per-agent applicatio
 First launch should create the home and help connect a model account. Later New session launches should open directly with the saved setup. Do not require package installation, path editing, copying config folders, or selecting an extension list for ordinary use.
 
 Acceptance: download → install → first login → new chat → second new chat → explicit resume. Repeat in a path containing spaces. Check two chats have distinct transcripts and use the intended project. Handle a missing project folder with a useful choice rather than an unexplained startup error. Label unsigned previews honestly while production signing is arranged.
+
+Also check fresh-task behavior with the selected extensions. Put a distinctive task fact and selected case in review A, then start review B through normal launch and delegation. A's transcript, case selection, verdict, and task summary must not enter B's initial context; a deliberately retained general lesson may remain available. Explicit Resume must restore the chosen review. This checks the boundary between reusable learning and task carryover.
 
 ## 3. Exercise updates and collaboration
 
@@ -36,6 +40,8 @@ Choose a second agent with a different extension suite and no dependency on HQ. 
 Do not copy the whole daily-driver home into a release. A local import should first show what is software, what is personal configuration, what is secret, and what is session data. The selected suite must be supplied or inspected on its owner's machine; the catalogue cannot infer it from a list of repository names.
 
 Acceptance: both agents use the same install/new-session/update rules while keeping their own tools, prompts, data, and release schedules.
+
+Verify the edit paths too: changing private settings or the private append file affects the next new session without rebuilding; changing the source suite, skill, or compiled baseline yields a new tested build that can be installed into the same home. Keep all existing chats and declared extension data through that change.
 
 ## 5. Add optional private provisioning
 

@@ -4,11 +4,15 @@ Status: proposed workflow. The existing Engineering builder is the tested refere
 
 ## Curate the whole suite
 
+Definitions maintained in this repository use `agents/<agent-id>/`; catalogue records use `catalogue/<agent-id>/`. The [files and sessions guide](FILES-AND-SESSIONS.md) maps each source component to its installed resource or private home file. An externally maintained agent keeps its source in its owning repository.
+
 An agent definition must identify its full setup: extensions and exact sources, package lock, skills and companion assets, system and append prompts, settings defaults, model options, connectors, runtime programs, and private state paths. A list of npm package names is not enough.
 
 An import from a personal Pi setup should produce a reviewable definition. It should classify each item as public release content, private setup, runtime state, or an unresolved machine dependency. It must identify absolute local paths and install hooks. Do not publish private values as a side effect of discovering the setup. A local importer is planned, not implemented here.
 
 Use the maintained upstream source for expertise. For Engineering, keep `pi-consultants` as the source of its profiles, skills, and HQ behavior. Pin that source in this catalogue; do not maintain a second edited copy of B's practice.
+
+Application changes produce a new tested build, which may stay private and install into an existing home. Personal settings and private append instructions can be edited in that home without rebuilding. Do not promise arbitrary mutable extension overlays or hot reload as already-supported features. A readable copy of a compiled baseline prompt is not an active replacement for the compiled instructions.
 
 ## Build the application
 

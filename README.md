@@ -24,7 +24,9 @@ The first desktop version should keep PiG's terminal chat UI. A launcher handles
 | Installed agent | A selected release and its private settings, accounts, chats, and extension data | As you use and configure it |
 | Session | One conversation and its tool activity, with a chosen working folder | When you start, continue, or branch a chat |
 
-A new session keeps the installed setup and starts a fresh conversation. It does not duplicate the installation, erase accounts, or load every old chat into the model.
+**One installed agent can have many separate sessions.** For an independent reviewer, each new review starts a fresh chat; continuing an old review requires an explicit Resume choice. The agent keeps its setup and selected reusable lessons without automatically loading past review transcripts, verdicts, or active-case state.
+
+The [plain guide to files, edits, and sessions](docs/FILES-AND-SESSIONS.md) shows exactly where a generic agent's source, installed resources, private settings, and separate chat files should live. These paths are proposed conventions for the packager, not a claim that a new reviewer app already exists.
 
 Public releases contain account requirements and login support. Actual credentials belong to a private installation. A personal encrypted setup pack can carry selected credentials and private settings between machines; it is separate from the public catalogue.
 
@@ -38,6 +40,7 @@ Agents may be specialists, a personal daily driver, or a complete workflow suite
 
 ## Read next
 
+- [Where files live and how to edit them](docs/FILES-AND-SESSIONS.md): a concrete source/install/private-home map and the independent reviewer example.
 - [Agent, home, and session contract](docs/AGENT-CONTRACT.md): what self-contained means, what gets packaged, credentials, prompt rules, and session behavior.
 - [Build and release design](docs/BUILD-AND-RELEASE.md): curation, pinned dependencies, provenance, native apps, updates, and the catalogue.
 - [Implementation plan](docs/IMPLEMENTATION-PLAN.md): the first full install-to-update journey and the evidence needed to call it ready.

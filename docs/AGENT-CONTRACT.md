@@ -8,7 +8,9 @@ Curate complete agents that people can download and use with little setup. An ag
 
 Self-contained means the application chooses and supplies its runtime, extensions, prompt layers, defaults, and private-state roots. It does not mean that model services run offline, that every external service is bundled, or that the process is an operating-system sandbox.
 
-The normal path is **install once, connect accounts once, open many sessions**.
+The normal path is **install once, connect accounts once, open many sessions**. An independent reviewer starts a new conversation for every new review task. One session means one conversation; it does not limit an agent to one permanent conversation.
+
+The [files and sessions guide](FILES-AND-SESSIONS.md) defines the proposed generic source, release, and private-home paths and explains which edits need a build. These conventions apply to agents beyond the Engineering prototype.
 
 ## 2. Definitions and ownership
 
@@ -32,8 +34,8 @@ The catalogue owns packaging and lifecycle metadata. Each agent owns its experti
 | Item | Released application | Private home |
 |---|---|---|
 | Engine and required runtimes | Pinned, bundled native builds | Optional runtime cache only |
-| Extensions and dependencies | Exact tested suite, with local imports and production dependencies | Explicit user customization, if supported |
-| Skills, scripts, references, templates, themes | Complete trees and assets | Private additions, if supported |
+| Extensions and dependencies | Exact tested suite, with local imports and production dependencies | A changed suite uses a new public or private build; ad hoc overlays need a later defined policy |
+| Skills, scripts, references, templates, themes | Complete trees and assets | Maintained additions use a new build; supported personal prompt additions live in the home |
 | Baseline system prompt | Maintained and compiled into the agent | A changed baseline requires a new release |
 | Maintained append prompts | Explicit ordered release files | Private append prompt additions |
 | Settings and provider configuration | Non-secret defaults and supported options | Model choice, local overrides, account setup |
@@ -59,13 +61,15 @@ PiG 0.5.3 rejects `--system-prompt` replacement for a compiled Piglet but permit
 
 For the curated launch path, use PiG's supported project-trust controls to exclude project runtime configuration while retaining project context files. In PiG 0.5.3, `--no-approve` means that the project configuration is not trusted; it is not a switch that rejects every tool action. This policy still needs an integration test with the exact packaged suite. Advanced CLI changes must be explicit and reported as a customized run. [Sources: argument handling](https://github.com/MichaelKinsy/PiG/blob/v0.5.3/coding/cli/args.go), [startup trust and context](https://github.com/MichaelKinsy/PiG/blob/v0.5.3/coding/cli/cli_runtime_build.go), [settings loading](https://github.com/MichaelKinsy/PiG/blob/v0.5.3/internal/codingagent/settings.go).
 
-Private settings survive updates. New release defaults should be visible without silently resetting the user's choices. Changes that need a migration must say so and provide a tested path.
+On first installation, the installer starts the private settings file from release defaults. After that it is the user's settings file and survives updates. New release defaults remain visible separately; automatic default/override merging is not an implemented promise. Changes that need a migration must say so and provide a tested path. Private file edits should take effect on the next new session, with any supported live reload documented by the selected suite.
 
 Validate explicit prompt paths before launch. PiG may treat a missing prompt-file argument as literal prompt text. Inspect the effective context sources too: its native project context search includes ancestor instruction files. That is useful project context, but must not be mistaken for a promise that only files inside the selected folder can affect the conversation.
 
 ## 5. New sessions, resume, and storage
 
 **New session** starts a fresh conversation using the same installed release, credentials, settings, tools, and private home. It creates a unique native session file once there is conversation content. Closing a session does not delete it. Starting another session does not automatically inject every old conversation. Any extension that recalls or injects past knowledge must be identified in that agent's entry.
+
+The catalogue launcher starts a fresh process and native session for each New session action. A new task must also avoid stale task context loaded by extensions: selected cases, old briefs, prior verdicts, queued work, and task summaries. Standing instructions and selected reusable lessons may remain available. Prior task records are retrieved when the current task calls for them; they are not automatically treated as fresh-review context. The same default applies to new delegated requests. See the [reviewer example](FILES-AND-SESSIONS.md#6-your-independent-reviewer-one-task-one-fresh-session).
 
 The launcher selects the session directory under the home explicitly. Changing the working folder must not change where chats are stored. The default proposed home for new catalogue installations is `~/.pig-agent/<agent-id>`; an explicit alternate home creates another installation. This is a proposed PiG-Agent path, not PiG's default and not a migration instruction for existing B users.
 
