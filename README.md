@@ -35,6 +35,7 @@ Public releases contain account requirements and login support. Actual credentia
 | Agent | Source | Status |
 |---|---|---|
 | [Engineering consultant B](catalogue/engineering/README.md) | `pi-consultants` | Working independent prototype; desktop installation and full catalogue qualification remain |
+| [Independent Reviewer: design and practice drafts](docs/reviewer/README.md) | Proposed PiG-Agent definition, drawing on B's review workbench | Design for review; prompt, skill and playbook samples available; no downloadable Reviewer yet |
 
 Agents may be specialists, a personal daily driver, or a complete workflow suite. They need not use the consultant HQ or share a memory system. Each entry must name its own dependencies, accounts, state paths, and tested behavior.
 

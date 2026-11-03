@@ -35,6 +35,8 @@ Acceptance: evidence names the actual artifact tested and distinguishes automate
 
 ## 4. Generalize with a second suite
 
+The [Independent Reviewer proposal](reviewer/README.md) is a concrete candidate. It uses B's judgment and Git helpers, has no mandatory HQ or shared memory store, and must complete a review of a plan or document without a Git repository.
+
 Choose a second agent with a different extension suite and no dependency on HQ. Capture its maintained prompt, append prompts, package lock, defaults, external requirements, credential declarations, and state paths in a definition. Use that second agent to decide which parts of the Engineering builder truly belong in the shared packager.
 
 Do not copy the whole daily-driver home into a release. A local import should first show what is software, what is personal configuration, what is secret, and what is session data. The selected suite must be supplied or inspected on its owner's machine; the catalogue cannot infer it from a list of repository names.
