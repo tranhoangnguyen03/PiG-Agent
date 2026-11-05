@@ -51,8 +51,8 @@ test("install and new/print/rpc use selected app and separated state", async t =
   assert.match(lines[3], /--session-dir/);
   assert.doesNotMatch(lines[3], /--continue|--session [^-\s]/);
   assert.match(lines[3], /-e /);
-  assert.throws(() => call(bin, ["new", "--continue"], env), /Expected values|assert/);
-  assert.throws(() => call(bin, ["new", "-c"], env), /Expected values|assert/);
+  assert.throws(() => call(bin, ["new", "--continue"], env), /This agent owns its session/);
+  assert.throws(() => call(bin, ["new", "-c"], env), /This agent owns its session/);
   call(bin, ["rpc"], env);
   assert.match(await fs.readFile(capture, "utf8"), /--mode rpc/);
   call(bin, ["print", "hello"], env);
