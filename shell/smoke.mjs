@@ -88,14 +88,46 @@ try {
     await fs.access(path.join(home,".agent/current/app/role/skills/shell-orientation/SKILL.md"));
     return {extensions:release.extensions.length,roleSkills:release.roleSkills.length};
   });
+  const probes = new Map([
+    ["SHELL_PROBE_FLOW", { tool: "external_help", params: { topic: "contracts" }, reply: "FLOW_HELP_EXECUTED" }],
+    ["SHELL_PROBE_COMMS", { tool: "comms_peers", params: {}, reply: "COMMS_PEERS_EXECUTED" }],
+  ]);
+  const usedProbes = new Set();
+  let providerError;
   server=createServer(async(req,res)=>{
-    for await (const _ of req) {}
-    res.writeHead(200,{"Content-Type":"text/event-stream"});
-    const id="smoke",model="probe";
-    const chunk=(delta,reason)=>"data: "+JSON.stringify({id,object:"chat.completion.chunk",model,choices:[{index:0,delta,finish_reason:reason}]})+"\n\n";
-    res.write(chunk({role:"assistant",content:"SHELL_NATIVE_REPLY"},null));
-    res.write(chunk({},"stop"));
-    res.end("data: [DONE]\n\n");
+    try {
+      const chunks=[];
+      for await (const bytes of req) chunks.push(bytes);
+      const body=JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      const user=body.messages.filter(m=>m.role==="user").at(-1);
+      const text=typeof user?.content==="string" ? user.content : JSON.stringify(user?.content||"");
+      const probe=[...probes].find(([name])=>text.includes(name));
+      const results=body.messages.filter(m=>m.role==="tool");
+      const id="smoke",model="probe";
+      const chunk=(delta,reason)=>"data: "+JSON.stringify({id,object:"chat.completion.chunk",model,choices:[{index:0,delta,finish_reason:reason}]})+"\n\n";
+      res.writeHead(200,{"Content-Type":"text/event-stream"});
+      if (probe && !results.length) {
+        const [marker, spec]=probe;
+        const tools=(body.tools||[]).map(x=>x.function?.name||x.name);
+        assert.ok(tools.includes(spec.tool), "PiG did not expose required tool "+spec.tool+": "+tools.join(", "));
+        res.write(chunk({role:"assistant",tool_calls:[{index:0,id:"smoke-tool-call",type:"function",function:{name:spec.tool,arguments:JSON.stringify(spec.params)}}]},null));
+        res.write(chunk({},"tool_calls"));
+      } else if (probe) {
+        const [marker,spec]=probe;
+        assert.ok(results.length>0,"Expected a native tool return for "+spec.tool);
+        usedProbes.add(marker);
+        res.write(chunk({role:"assistant",content:spec.reply},null));
+        res.write(chunk({},"stop"));
+      } else {
+        res.write(chunk({role:"assistant",content:"SHELL_NATIVE_REPLY"},null));
+        res.write(chunk({},"stop"));
+      }
+      res.end("data: [DONE]\n\n");
+    } catch (e) {
+      providerError ||= e;
+      res.writeHead(500,{"Content-Type":"application/json"});
+      res.end(JSON.stringify({error:{message:e.message}}));
+    }
   });
   await new Promise(resolve=>server.listen(0,"127.0.0.1",resolve));
   const port=server.address().port;
@@ -112,6 +144,17 @@ try {
     for(const expected of ["bro","external","comms"]) assert.ok(names.some(n=>n===expected||n.startsWith(expected+" ")),
       "Missing "+expected+" commands; observed "+names.join(", "));
     return {commandCount:commands.length,matched:["bro","external","comms"]};
+  });
+  await check("real Flow help and Comms peer tools execute through PiG",async()=>{
+    for(const marker of probes.keys()) {
+      const result=await command(stable,["print",marker,"--home",home,"--cwd",work,
+        "--provider","study","--model","probe","--thinking","off"],
+        {env,cwd:work,timeoutMs:90000});
+      if (providerError) throw providerError;
+      assert.ok(usedProbes.has(marker),"PiG did not complete the "+marker+" tool call");
+      assert.match(result,new RegExp(probes.get(marker).reply));
+    }
+    return { tools:[...probes.values()].map(v=>v.tool), scope:"Local native tool execution; not two-agent messaging" };
   });
   await check("two print sessions do not overwrite each other",async()=>{
     for(const marker of ["FIRST","SECOND"]){
