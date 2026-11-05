@@ -60,10 +60,10 @@
     {
       "id": "comms",
       "repository": "https://github.com/tranhoangnguyen03/pi-comms.git",
-      "commit": "c26b7e72c3e67a7dc2f29d7b77c2da007fa1e5d3",
+      "commit": "d5d5219b41c2b34f718d7dbad4ad0c49547d027e",
       "entry": "dist/extension.js",
       "package": "pi-comms",
-      "version": "0.1.8",
+      "version": "0.1.9",
       "devBuild": true,
       "skills": [
         "skills"
