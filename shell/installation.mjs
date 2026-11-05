@@ -68,6 +68,25 @@ async function atomicCurrent(home, buildId) {
   try { await fs.rename(temp, link); }
   finally { await fs.rm(temp, { force: true }); }
 }
+
+/** One writer selects an installed release. A crash leaves an explicit lock
+ * rather than allowing a second installer to corrupt the selected home.
+ */
+async function withInstallLock(home, work) {
+  const dir = path.join(home, ".agent");
+  await fs.mkdir(dir, { recursive: true, mode: 0o700 });
+  const file = path.join(dir, "install.lock");
+  try {
+    await fs.writeFile(file, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() }) + "\n",
+      { flag: "wx", mode: 0o600 });
+  } catch (e) {
+    if (e.code !== "EEXIST") throw e;
+    throw new Error("Another installation is active or was interrupted: " + file +
+      ". Confirm no installer remains before clearing the stale lock.");
+  }
+  try { return await work(); }
+  finally { await fs.rm(file, { force: true }); }
+}
 export async function install(bundle, requestedHome) {
   bundle = await fs.realpath(bundle);
   const release = await verifyBundle(bundle);
@@ -76,6 +95,7 @@ export async function install(bundle, requestedHome) {
   const releases = path.join(home, ".agent/releases");
   if (bundle === home || (bundle.startsWith(home + path.sep) && !bundle.startsWith(releases + path.sep)))
     throw new Error("Unpacked release must be outside the private home");
+  return withInstallLock(home, async () => {
   for (const rel of [".agent/releases", ".pi/settings.json", ".pi/auth.json", "sessions", "state", "bin/" + release.id])
     await assertHomeDest(home, rel);
   await fs.mkdir(releases, { recursive: true, mode: 0o700 });
@@ -107,6 +127,7 @@ export async function install(bundle, requestedHome) {
   }
   await atomicCurrent(home, release.buildId);
   return { home, command: stable, release };
+  });
 }
 export async function selected(home) {
   home = await fs.realpath(home);

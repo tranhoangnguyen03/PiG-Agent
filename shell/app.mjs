@@ -22,6 +22,16 @@ for (let i = 2; i < process.argv.length; i++) {
 home = path.resolve(home);
 let action = ["new", "resume", "rpc", "print", "install", "doctor", "info", "rollback", "help"].includes(raw[0]) ? raw.shift() : "new";
 const extra = raw;
+const blockedLaunchFlags = new Set([
+  "--session", "--session-dir", "--continue", "--resume", "--no-session", "--session-id",
+  "-c", "-r", "--mode", "--piglet",
+]);
+function refuseIdentityAndSessionOverrides(argv) {
+  for (const flag of argv) {
+    if (blockedLaunchFlags.has(flag) || [...blockedLaunchFlags].some(name => flag.startsWith(name + "=")))
+      throw new Error("This agent owns its session and identity. Use new/resume/rpc instead of " + flag);
+  }
+}
 
 async function run(executable, argv, opts = {}) {
   const child = spawn(executable, argv, { ...opts, stdio: "inherit" });
@@ -138,7 +148,8 @@ if (action === "help" || extra.includes("--help")) {
           if (!extra.length) throw new Error("print requires a prompt");
           args.push("-p", extra.shift());
         }
-        // No -c or --resume on new: each launch gets an empty conversation.
+        // No old chat or cross-home session override can enter through extra flags.
+        refuseIdentityAndSessionOverrides(extra);
         args.push(...extra);
         const working = cwd ? path.resolve(cwd) : path.join(home, "workspace");
         await fs.access(working);

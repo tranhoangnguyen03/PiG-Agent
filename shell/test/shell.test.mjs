@@ -51,6 +51,8 @@ test("install and new/print/rpc use selected app and separated state", async t =
   assert.match(lines[3], /--session-dir/);
   assert.doesNotMatch(lines[3], /--continue|--session [^-\s]/);
   assert.match(lines[3], /-e /);
+  assert.throws(() => call(bin, ["new", "--continue"], env), /Expected values|assert/);
+  assert.throws(() => call(bin, ["new", "-c"], env), /Expected values|assert/);
   call(bin, ["rpc"], env);
   assert.match(await fs.readFile(capture, "utf8"), /--mode rpc/);
   call(bin, ["print", "hello"], env);
@@ -85,4 +87,15 @@ test("tampered bundle is rejected before installation changes private state", as
   const a = await setup(t, "0.1.0");
   await fs.appendFile(path.join(a.root, "app/role/prompts/append.md"), "TAMPERED\n");
   await assert.rejects(() => install(a.root, a.home), /integrity/i);
+});
+
+test("installation lock rejects competing writer without changing the selected release", async t => {
+  const a=await setup(t,"0.1.0");
+  const first=await install(a.root,a.home);
+  const lock=path.join(a.home,".agent/install.lock");
+  await fs.writeFile(lock,JSON.stringify({pid:process.pid})+"\\n",{mode:0o600});
+  await assert.rejects(() => install(a.root,a.home),/Another installation/);
+  assert.equal((await selected(a.home)).release.buildId,first.release.buildId);
+  await fs.rm(lock);
+  await install(a.root,a.home);
 });
