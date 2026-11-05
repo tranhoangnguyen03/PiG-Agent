@@ -26,6 +26,7 @@ The Reviewer is only an example role. The shell must work unchanged for a review
 ## Concept documents
 
 - [Agent shell architecture](docs/SHELL-ARCHITECTURE.md): ownership boundaries, test expectations, upstream compatibility strategy
+- [Hands-on shell acceptance](docs/SHELL-MANUAL-TEST.md): native TUI, functional pi-bro, Flow delegation and cross-home messaging
 - [Agent contract](docs/AGENT-CONTRACT.md): release, installed instance, home, sessions and forms of access
 - [Where files live and how to edit them](docs/FILES-AND-SESSIONS.md): maintained source, installed resources and private state
 - [Build and release design](docs/BUILD-AND-RELEASE.md): versioned agent applications and package provenance
