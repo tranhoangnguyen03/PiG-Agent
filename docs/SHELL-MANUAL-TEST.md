@@ -44,7 +44,7 @@ Record PiG version, Bro package version, OS, exact command, expected/actual resu
 
 ## Test pi-comms between main Pi and this specialist
 
-**Prerequisite:** both participants run the version in [pi-comms PR #34](https://github.com/tranhoangnguyen03/pi-comms/pull/34) or a later release containing it. The regular unpatched pi-comms package uses its agent directory as broker location and cannot join a broker in another installed home.
+**Prerequisite:** both participants use the **same pinned pi-comms 0.2.0 candidate** from [pi-comms PR #34](https://github.com/tranhoangnguyen03/pi-comms/pull/34), stacked on F10 recovery [PR #33](https://github.com/tranhoangnguyen03/pi-comms/pull/33). Check the full Comms SHA in `shell/source-lock.json` and rebuild from that lock; a published 0.1.8 install still uses a per-home broker and cannot join another installed agent.
 
 In the shell, the launcher selects `PI_COMMS_BROKER_DIR` from the environment or defaults to `$HOME/.pig-agent/_comms`. Start main Pi with exactly the same broker directory, while preserving its own normal Pi agent directory:
 
@@ -54,7 +54,7 @@ PI_COMMS_BROKER_DIR="$HOME/.pig-agent/_comms" pi
 
 Leave both **distinct native sessions** running. In main Pi, use `comms_peers` or `/comms` to locate the specialist's actual session. Try one substantive `comms_message`, approve the **exact session-pair contact** in the native human dialog, and have the specialist answer via its own installed `comms_message` tool. Test `comms_ask` separately: first reply is not the same as completed work. Then test Pause/revoke and inspect what remains visible. Confirm neither home contains the other one's session files or model tokens.
 
-Starting a new session changes its exact identity. The shared broker does **not** launch offline agents, silently restore old consent, share prompts or credentials, or provide M4 durable history. No approval prompt should be bypassed or fabricated just to make a test pass.
+Starting a new session changes its exact identity. The shared broker does **not** launch offline agents, silently restore old consent, or share prompts or credentials. **F10 in this pinned 0.2.0 candidate** restores same-saved-session records, links, Pause and explicit refusal; it does not restore positive approvals or guarantee broker-offline mailbox delivery. Review [the detailed cross-home acceptance recipe](https://github.com/tranhoangnguyen03/pi-comms/blob/feat/pig-agent-shared-broker-root/docs/PIG-CROSS-HOME-QUALIFICATION.md), including two independent PiG specialists, actual return handles and human-versus-agent evidence. No approval prompt should be bypassed or fabricated just to make a test pass.
 
 ## Test main Pi → shell RPC and upgrades
 
