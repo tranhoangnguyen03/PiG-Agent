@@ -43,7 +43,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24.15.0'
+      - name: Cache pinned native source archives
+        uses: actions/cache@v4
+        with:
+          path: dist/shell/cache
+          key: pig-shell-native-${{ runner.os }}-${{ runner.arch }}-pig0.5.3-node24.15.0-v1
       - name: Build pinned PiG and all three upstream extensions
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: node shell/build.mjs
       - name: Real PiG package and RPC smoke
         run: node shell/smoke.mjs dist/shell/bundle
