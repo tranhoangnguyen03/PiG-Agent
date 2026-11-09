@@ -38,7 +38,7 @@
     {
       "id": "bro",
       "repository": "https://github.com/tranhoangnguyen03/pi-bro.git",
-      "commit": "c0315254e68deaa399be0f14bcd154f2818dcef3",
+      "commit": "738e69f6f7cba6f828b27859c172bcf69100e829",
       "entry": "src/bro.ts",
       "package": "pi-bro",
       "version": "0.36.1",
