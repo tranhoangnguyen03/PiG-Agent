@@ -18,6 +18,12 @@ After install, `~/.pig-agent/shell-reference/` holds `.agent/releases/` (immutab
 
 Both direct and delegated use select the **same installed application**. The main Pi may launch its RPC command; the installed extension tools remain present. Cross-home pi-comms uses the same-user, opt-in broker root from [pi-comms PR #34](https://github.com/tranhoangnguyen03/pi-comms/pull/34); only that broker is shared.
 
+## Pinned release download reliability
+
+The builder still downloads PiG and Node **only at the exact versions and SHA-256 values in `source-lock.json`**. For the PiG release archive, an optional `GH_TOKEN` lets it try GitHub's release-asset API when the browser download endpoint is unreliable. The API metadata's digest and the downloaded bytes must both match the source lock. When the API is unavailable, the original release URL remains the fallback. A digest mismatch is a hard build failure, never a reason to skip verification.
+
+The shell CI passes a read-only GitHub Actions token and caches downloaded archives under `dist/shell/cache`. Every reused archive is rehashed by `build.mjs`; neither the token nor credentials enter the published agent bundle. The cache has no authority to change the source pins.
+
 ## Operations (after a native build)
 
 ```sh
