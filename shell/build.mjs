@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { sha256, exists, inventory, readJSON, writeJSON } from "./installation.mjs";
+import { prefetchPinnedPiGRelease } from "./release-asset.mjs";
 
 const source = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.dirname(source);
@@ -31,10 +32,22 @@ function exec(command, args, opts = {}) {
 async function download(url, item) {
   const file = path.join(cache, item.name);
   if (!await exists(file) || sha256(await fs.readFile(file)) !== item.sha256) {
-    const tmp = file + ".download";
-    exec("curl", ["--fail", "--location", "--retry", "3", "--silent", "--show-error", "--output", tmp, url]);
-    if (sha256(await fs.readFile(tmp)) !== item.sha256) throw new Error("Checksum mismatch for " + item.name);
-    await fs.rename(tmp, file);
+    // GitHub browser-release downloads intermittently return HTTP 504. The
+    // authenticated asset API uses the *same* release and pinned SHA-256.
+    // Unavailable API/token falls back to the original release URL, never a
+    // different version or a checksum-disabled path.
+    const pigUrl = lock.pig.source + "/releases/download/v" + lock.pig.version + "/" + item.name;
+    const apiFetched = url === pigUrl && await prefetchPinnedPiGRelease({ lock, item, cache });
+    if (!apiFetched) {
+      const tmp = file + ".download";
+      try {
+        exec("curl", ["--fail", "--location", "--retry", "3", "--silent", "--show-error", "--output", tmp, url]);
+        if (sha256(await fs.readFile(tmp)) !== item.sha256) throw new Error("Checksum mismatch for " + item.name);
+        await fs.rename(tmp, file);
+      } finally {
+        await fs.rm(tmp, { force: true }).catch(() => {});
+      }
+    }
   }
   return file;
 }
