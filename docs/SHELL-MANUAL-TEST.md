@@ -2,7 +2,7 @@
 
 **Status:** Manual qualification steps, not a claim that they passed. The current preview bundles the real PiG runtime and all three extensions. Native CI checks the package, commands, some model tools, and separate sessions. These steps test the **interactive behavior that CI cannot establish**.
 
-Build on your operating system using the exact pinned checkout in [PR #2](https://github.com/tranhoangnguyen03/PiG-Agent/pull/2) or download that commit's native GitHub Actions artifact. Do not use a passing artifact from a different commit as evidence.
+Build on your operating system from the exact `shell/source-lock.json` pin in this integration branch. [PR #2](https://github.com/tranhoangnguyen03/PiG-Agent/pull/2) was merged into the still-open catalogue foundation branch, but its old shell archive pins a pre-M4 Comms candidate. Rebuild and verify the new artifact; an earlier passing archive is not qualification evidence.
 
 ## Start the standalone shell
 
