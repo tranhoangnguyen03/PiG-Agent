@@ -66,6 +66,27 @@ test("install and new/print/rpc use selected app and separated state", async t =
   assert.throws(() => call(bin, ["resume", "/tmp/not-this-agent.jsonl"], env));
   assert.ok((await fs.readdir(path.join(a.home, "sessions"))).includes("review-a.jsonl"));
 });
+test("resumes within a symlinked private home without accepting outside transcripts", async t => {
+  const a = await setup(t, "0.1.0");
+  await install(a.root, a.home);
+  const linkedHome = path.join(a.tmp, "linked-home");
+  await fs.symlink(a.home, linkedHome, "dir");
+  const bin = path.join(a.home, "bin/shell-reference");
+  const capture = path.join(a.tmp, "captured-linked-home");
+  const transcript = path.join(linkedHome, "sessions/symlinked.jsonl");
+  await fs.writeFile(transcript, '{"type":"session"}\n');
+  call(bin, ["resume", transcript], { PIG_AGENT_HOME: linkedHome, TEST_CAPTURE: capture });
+  const captured = await fs.readFile(capture, "utf8");
+  assert.ok(captured.includes("--session " + await fs.realpath(transcript)));
+  // The canonical-path fix must not loosen the private-home boundary.
+  const outside = path.join(a.tmp, "outside.jsonl");
+  await fs.writeFile(outside, '{"type":"session"}\n');
+  assert.throws(() => call(bin, ["resume", outside], {
+    PIG_AGENT_HOME: linkedHome,
+    TEST_CAPTURE: capture,
+  }), /Session must belong to this agent home/);
+});
+
 test("update and rollback leave secrets, sessions and private prompt intact", async t => {
   const a = await setup(t, "0.1.0");
   const one = await install(a.root, a.home);
