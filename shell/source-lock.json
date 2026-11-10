@@ -48,10 +48,10 @@
     {
       "id": "external",
       "repository": "https://github.com/tranhoangnguyen03/pi-flow-external.git",
-      "commit": "83314a17e34b6d84796a1d88cf6c1ced30d4d3ab",
+      "commit": "8751fa24b9915c3201e23b4557df5a5fa593f9bc",
       "entry": "index.ts",
       "package": "@tranhoangnguyen0310/pi-flow-external",
-      "version": "6.3.0-external.0",
+      "version": "6.3.0-external.1",
       "devBuild": false,
       "skills": [
         "skills/pi-flow-orchestration"
