@@ -59,6 +59,20 @@ let temp,server;
 try {
   const release=await verifyBundle(bundle);
   report.release={id:release.id,version:release.version,buildId:release.buildId,source:release.source,extensions:release.extensions};
+  await check("pinned Flow source and version match installed bundle", async () => {
+    const lock = await readJSON(path.join(bundle, "source-lock.json"));
+    const pinned = lock.extensions.find(x => x.id === "external");
+    const installed = release.extensions.find(x => x.id === "external");
+    assert.ok(pinned && installed, "Installed shell or lock has no Flow extension");
+    assert.match(pinned.commit, /^[a-f0-9]{40}$/);
+    assert.equal(installed.sourceCommit, pinned.commit, "Flow source commit drifted from the shell lock");
+    assert.equal(installed.version, pinned.version, "Flow version drifted from the shell lock");
+    assert.equal(installed.package, pinned.package, "Flow package name drifted from the shell lock");
+    const pkg = await readJSON(path.join(bundle, "app/extensions/external/package.json"));
+    assert.equal(pkg.version, pinned.version, "Bundled Flow package differs from the source lock");
+    assert.equal(pkg.name, pinned.package, "Bundled Flow package name differs from the source lock");
+    return { commit: installed.sourceCommit, version: installed.version };
+  });
   temp=await fs.mkdtemp(path.join(os.tmpdir(),"pig-shell-smoke "));
   const home=path.join(temp,"reference home");
   const broker=path.join(temp,"broker");
