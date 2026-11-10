@@ -1,0 +1,6 @@
+{
+  "id": "shell-reference",
+  "name": "Shell reference agent",
+  "version": "0.1.0-preview.1",
+  "description": "Neutral role to qualify the reusable agent shell"
+}
