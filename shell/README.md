@@ -16,7 +16,7 @@ The shell builds a complete **native PiG application**, bundles Node and three e
 
 After install, `~/.pig-agent/shell-reference/` holds `.agent/releases/` (immutable builds), `.agent/current` (selected build), `bin/shell-reference` (stable command), `.pi/` (provider keys and extension settings), `sessions/` (many separate transcripts), `state/` and `workspace/`.
 
-Both direct and delegated use select the **same installed application**. The main Pi may launch its RPC command; the installed extension tools remain present. Cross-home pi-comms uses the same-user, opt-in broker root from [pi-comms PR #34](https://github.com/tranhoangnguyen03/pi-comms/pull/34); only that broker is shared.
+Both direct and delegated use select the **same installed application**. The main Pi may launch its RPC command; the installed extension tools remain present. Cross-home pi-comms uses the same-user, opt-in broker root from [pi-comms PR #40](https://github.com/tranhoangnguyen03/pi-comms/pull/40); only that broker is shared.
 
 ## Pinned release download reliability
 
@@ -42,6 +42,6 @@ These are reference-shell commands; they do not replace PiG slash commands. `new
 
 ## Limits
 
-The source pins are **inputs to qualify**, not claims of PiG support. Bro's PiG notes target an older release; Flow and Comms have no verified PiG 0.5.3 joint-host record. No live provider, external CLI authorization, macOS GUI review, or real peer handoff is claimed until the corresponding smoke/manual evidence passes. The broker option does not start stopped agents or remove session-specific contact approval. See the architecture document.
+The Comms pin now targets an M4-based 0.2.0 shared-broker candidate, not the stale pre-F11/F12 0.2.0 branch. The source pins are **inputs to qualify**, not claims of PiG support. Bro's PiG notes target an older release; Flow and Comms have no verified PiG 0.5.3 joint-host record. No live provider, external CLI authorization, macOS GUI review, or real peer handoff is claimed until the corresponding smoke/manual evidence passes. The broker option does not start stopped agents or remove session-specific contact approval. See the architecture document.
 
 The reference shell is intentionally **not** a firm, department, room, memory store, workflow orchestrator, or reviewer practice. Those capabilities can use it without becoming part of its foundation.
