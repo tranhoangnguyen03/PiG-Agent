@@ -42,19 +42,27 @@ Record PiG version, Bro package version, OS, exact command, expected/actual resu
 
 [Upstream compatibility issue](https://github.com/tranhoangnguyen03/pi-flow-external/issues/112).
 
-## Test pi-comms between main Pi and this specialist
+## Test pi-comms between main Pi and PiG specialists
 
-**Prerequisite:** both participants use the **same pinned pi-comms 0.2.0 candidate** from [pi-comms PR #34](https://github.com/tranhoangnguyen03/pi-comms/pull/34), stacked on F10 recovery [PR #33](https://github.com/tranhoangnguyen03/pi-comms/pull/33). Check the full Comms SHA in `shell/source-lock.json` and rebuild from that lock; a published 0.1.8 install still uses a per-home broker and cannot join another installed agent.
+**Candidate:** pi-comms `0.2.0` from [PR #41](https://github.com/tranhoangnguyen03/pi-comms/pull/41), **based on merged M4 F10–F12 (0.1.12)**. The old [PR #34](https://github.com/tranhoangnguyen03/pi-comms/pull/34) and its Comms pin predate the current approval and durable-mailbox contract. Rebuild the shell with the updated exact `shell/source-lock.json` commit; using an earlier PiG preview is not valid evidence.
 
-In the shell, the launcher selects `PI_COMMS_BROKER_DIR` from the environment or defaults to `$HOME/.pig-agent/_comms`. Start main Pi with exactly the same broker directory, while preserving its own normal Pi agent directory:
+The PiG launcher uses `PI_COMMS_BROKER_DIR` from its environment, or defaults to `$HOME/.pig-agent/_comms`. Main Pi must use the **same absolute directory** while retaining its own `PI_CODING_AGENT_DIR`:
 
 ```sh
-PI_COMMS_BROKER_DIR="$HOME/.pig-agent/_comms" pi
+export PI_COMMS_BROKER_DIR="$HOME/.pig-agent/_comms"
+PI_COMMS_BROKER_DIR="$PI_COMMS_BROKER_DIR" pi
+PI_COMMS_BROKER_DIR="$PI_COMMS_BROKER_DIR" "$HOME/.pig-agent/shell-preview/bin/shell-reference" new
 ```
 
-Leave both **distinct native sessions** running. In main Pi, use `comms_peers` or `/comms` to locate the specialist's actual session. Try one substantive `comms_message`, approve the **exact session-pair contact** in the native human dialog, and have the specialist answer via its own installed `comms_message` tool. Test `comms_ask` separately: first reply is not the same as completed work. Then test Pause/revoke and inspect what remains visible. Confirm neither home contains the other one's session files or model tokens.
+For a full cross-home check, install two distinct PiG shell homes and leave main Pi plus both specialists running. Each host retains its own private keys, transcripts and model choices. In the actual TUIs:
 
-Starting a new session changes its exact identity. The shared broker does **not** launch offline agents, silently restore old consent, or share prompts or credentials. **F10 in this pinned 0.2.0 candidate** restores same-saved-session records, links, Pause and explicit refusal; it does not restore positive approvals or guarantee broker-offline mailbox delivery. Review [the detailed cross-home acceptance recipe](https://github.com/tranhoangnguyen03/pi-comms/blob/feat/pig-agent-shared-broker-root/docs/PIG-CROSS-HOME-QUALIFICATION.md), including two independent PiG specialists, actual return handles and human-versus-agent evidence. No approval prompt should be bypassed or fabricated just to make a test pass.
+1. Use `/comms status` and `comms_peers` to record each **exact native ID** and shared broker PID. If two PiG specialists use the same display name, choose by ID; do not guess an alias.
+2. Ask main Pi to assign a substantive read-only review to specialist A. The first genuine owner prompt grants one unordered exact pair for **both directions**. The original request continues. A asks a clarification, main Pi answers, and A sends a final report linked to the original message; `comms_ask` returns the first reply, not automatic work completion.
+3. Repeat PiG A ↔ PiG B without sharing either private home. Test one first-contact No/Esc, Pause/Resume, revoke and a third peer who is **not** transitively approved.
+4. Test saved-session resume, normal runtime restart, broker restart and F12 exact offline messages. **Allow this session** lasts through same-runtime socket drops but not Pi/broker restarts; **Allow & remember** survives those restarts until revoked. An accepted `queued` message survives broker restart on disk, but is not model admission or completed work. A fresh Pi session never inherits another session's ID, chats or approval.
+5. Test human drafts and Stop with real keyboard input. If using RPC, preserve real human approval forwarding or return approval-required; never silently grant contact.
+
+See [the full qualification ledger](https://github.com/tranhoangnguyen03/pi-comms/blob/feat/pig-cross-home-on-m4/docs/PIG-CROSS-HOME-QUALIFICATION.md). Protocol/client process tests and native smoke checks do **not** count as a real-model PiG assignment. Record exact host/Comms SHA, PiG/Node/OS, installed artifact digest, approval prompts, request/return handles, report links and result PASS / FAIL / NOT RUN.
 
 ## Test main Pi → shell RPC and upgrades
 
