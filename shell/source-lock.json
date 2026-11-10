@@ -60,7 +60,7 @@
     {
       "id": "comms",
       "repository": "https://github.com/tranhoangnguyen03/pi-comms.git",
-      "commit": "39ad5a7888981efbeb4c819b13d31e2f8a7576a7",
+      "commit": "980a67325e6afe4f2795e54dfd9b975e2c599fcf",
       "entry": "dist/extension.js",
       "package": "pi-comms",
       "version": "0.2.0",
