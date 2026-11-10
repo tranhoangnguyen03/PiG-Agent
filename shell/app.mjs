@@ -140,7 +140,11 @@ if (action === "help" || extra.includes("--help")) {
           if (!file || !path.isAbsolute(file) || path.extname(file) !== ".jsonl")
             throw new Error("resume requires the absolute path to a saved .jsonl conversation");
           const resolved = await fs.realpath(file);
-          if (!resolved.startsWith(path.join(home, "sessions") + path.sep))
+          // Compare canonical paths on both sides: /var on macOS resolves to
+          // /private/var, and checking a realpath against a lexical home path
+          // wrongly rejects a valid session. Keep the home boundary strict.
+          const sessionsRoot = await fs.realpath(path.join(home, "sessions"));
+          if (!resolved.startsWith(sessionsRoot + path.sep))
             throw new Error("Session must belong to this agent home");
           args.push("--session", resolved);
         }
