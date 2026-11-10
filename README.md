@@ -21,7 +21,7 @@ The Reviewer is only an example role. The shell must work unchanged for a review
 
 [Shell reference implementation](shell/README.md) provides a native PiG build from pinned source with **pi-bro, pi-flow-external and pi-comms**, its own versioned installation, and commands to open a fresh TUI session, resume a specific chat, use print/RPC, inspect installation health and roll back.
 
-[Architecture and compatibility](docs/SHELL-ARCHITECTURE.md) names the exact split between shipped code, private settings and conversations, and the shared pi-comms transport. CI verifies package/command registration and separate sessions under a synthetic local model. **Functional pi-bro modals, external CLI delegation, and consent-based peer exchange remain separate native/manual acceptance requirements.** This is an integration candidate, not a qualified production release.
+[Architecture and compatibility](docs/SHELL-ARCHITECTURE.md) names the exact split between shipped code, private settings and conversations, and the shared pi-comms transport. CI verifies package/command registration and separate sessions under a synthetic local model. **Functional pi-bro modals, external CLI delegation, and consent-based peer exchange remain separate native/manual acceptance requirements.** The candidate cross-home Comms shell pin now uses [pi-comms PR #41](https://github.com/tranhoangnguyen03/pi-comms/pull/41), based on merged F10–F12. Scripted native Comms tests do not qualify a real PiG TUI conversation. This is an integration candidate, not a qualified production release.
 
 ## Concept documents
 
