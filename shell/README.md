@@ -16,7 +16,7 @@ The shell builds a complete **native PiG application**, bundles Node and three e
 
 After install, `~/.pig-agent/shell-reference/` holds `.agent/releases/` (immutable builds), `.agent/current` (selected build), `bin/shell-reference` (stable command), `.pi/` (provider keys and extension settings), `sessions/` (many separate transcripts), `state/` and `workspace/`.
 
-Both direct and delegated use select the **same installed application**. The main Pi may launch its RPC command; the installed extension tools remain present. Cross-home pi-comms uses the same-user, opt-in broker root from [pi-comms PR #34](https://github.com/tranhoangnguyen03/pi-comms/pull/34); only that broker is shared.
+Both direct and delegated use select the **same installed application**. The main Pi may launch its RPC command; the installed extension tools remain present. Cross-home pi-comms uses the same-user broker directory from [M4-based pi-comms PR #41](https://github.com/tranhoangnguyen03/pi-comms/pull/41), which preserves all F10–F12 recovery and current pair approval. It is pinned by exact source commit in `source-lock.json`. Each installed agent retains its own private home; only the broker socket, approvals and offline mail live in the shared directory.
 
 ## Pinned release download reliability
 
