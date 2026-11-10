@@ -36,7 +36,7 @@ The packaged app keeps **full extension sources and resources**, including `node
 
 ## Upstream strategy
 
-PiG-Agent pins extension commits rather than copying and permanently forking their source. A failing compatibility probe goes to the owning repository with exact host version, reproduction, expected/observed behavior and a minimal proposed repair. The extension's normal release process produces the next pinned source. Pi-comms shared broker selection is an upstream pull request, not a private PiG-Agent patch.
+PiG-Agent pins extension commits rather than copying and permanently forking their source. A failing compatibility probe goes to the owning repository with exact host version, reproduction, expected/observed behavior and a minimal proposed repair. The extension's normal release process produces the next pinned source. Pi-comms shared broker selection is an upstream pull request, not a private PiG-Agent patch. The new M4-based shared broker candidate is [pi-comms PR #41](https://github.com/tranhoangnguyen03/pi-comms/pull/41); the older stacked PR #34 must not be merged over shipped F11/F12. Shell compatibility is pinned by exact source SHA, and a built-in `comms_peers` smoke check is not the live Pi↔PiG review acceptance.
 
 Do not add a second peer messaging protocol, session database, approval framework or browser TUI merely to make the shell appear complete. If a shell feature cannot pass native evaluation, retain the test evidence and mark it unqualified instead of replacing the extension with a superficial mock.
 
