@@ -18,6 +18,12 @@ After install, `~/.pig-agent/shell-reference/` holds `.agent/releases/` (immutab
 
 Both direct and delegated use select the **same installed application**. The main Pi may launch its RPC command; the installed extension tools remain present. Cross-home pi-comms uses the same-user, opt-in broker root from [pi-comms PR #34](https://github.com/tranhoangnguyen03/pi-comms/pull/34); only that broker is shared.
 
+## Flow version selected by this shell
+
+The maintained `shell/source-lock.json` now selects **Flow 6.3.0-external.1** at merged source commit `8751fa24b9915c3201e23b4557df5a5fa593f9bc` ([upstream PR #114](https://github.com/tranhoangnguyen03/pi-flow-external/pull/114)). The shell builder checks out that exact commit and rejects package/version drift; `shell/smoke.mjs` additionally compares the built bundle's Flow source and package metadata to the lock.
+
+This is the **installed specialist's Flow version**, not an automatic update of the main Pi installation. It preserves PiG **0.5.3**, Node **24.15.0**, Bro **0.36.1** and Comms **0.2.0**. Flow's prior Linux/macOS qualification used an equivalent test-only lock override; this PR carries the selected source into the maintained shell lock. The native shell CI rebuilds both platforms and runs a synthetic-model smoke. Real Claude/Codex subscription, billing and human terminal acceptance remain separate from build verification.
+
 ## Pinned release download reliability
 
 The builder still downloads PiG and Node **only at the exact versions and SHA-256 values in `source-lock.json`**. For the PiG release archive, an optional `GH_TOKEN` lets it try GitHub's release-asset API when the browser download endpoint is unreliable. The API metadata's digest and the downloaded bytes must both match the source lock. When the API is unavailable, the original release URL remains the fallback. A digest mismatch is a hard build failure, never a reason to skip verification.
