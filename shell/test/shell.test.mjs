@@ -66,6 +66,26 @@ test("install and new/print/rpc use selected app and separated state", async t =
   assert.throws(() => call(bin, ["resume", "/tmp/not-this-agent.jsonl"], env));
   assert.ok((await fs.readdir(path.join(a.home, "sessions"))).includes("review-a.jsonl"));
 });
+test("two private PiG homes share only the explicit broker root, not their Pi state", async t => {
+  const first = await setup(t, "0.1.0");
+  const second = await setup(t, "0.1.0");
+  await install(first.root, first.home);
+  await install(second.root, second.home);
+  const brokerRoot = path.join(first.tmp, "shared broker");
+  const captureA = path.join(first.tmp, "capture-a"), captureB = path.join(second.tmp, "capture-b");
+  const expected = { PI_COMMS_BROKER_DIR: brokerRoot };
+  call(path.join(first.home, "bin/shell-reference"), ["new"], { ...expected, TEST_CAPTURE: captureA });
+  call(path.join(second.home, "bin/shell-reference"), ["new"], { ...expected, TEST_CAPTURE: captureB });
+  const a = (await fs.readFile(captureA, "utf8")).trim().split("\n");
+  const b = (await fs.readFile(captureB, "utf8")).trim().split("\n");
+  assert.equal(a[2], brokerRoot);
+  assert.equal(b[2], brokerRoot, "only the broker address is shared");
+  assert.notEqual(a[0], b[0]);
+  assert.equal(await fs.realpath(a[0]), await fs.realpath(path.join(first.home, ".pi")));
+  assert.equal(await fs.realpath(b[0]), await fs.realpath(path.join(second.home, ".pi")));
+  assert.notEqual(path.join(first.home, "sessions"), path.join(second.home, "sessions"));
+});
+
 test("resumes within a symlinked private home without accepting outside transcripts", async t => {
   const a = await setup(t, "0.1.0");
   await install(a.root, a.home);
