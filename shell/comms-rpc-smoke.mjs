@@ -50,9 +50,9 @@ function startRpc(bin, home, broker, cwd, model) {
         const p = waits.get(msg.id); waits.delete(msg.id); p.resolve(msg);
       } else {
         events.push(msg);
-        if (msg.type === 'extension_ui_request' && msg.method === 'confirm') {
+        if (msg.type === 'extension_ui_request' && (msg.method === 'confirm' || msg.method === 'select')) {
           confirms++;
-          // Test refuses contact. No human Allow is made or fabricated.
+          // Test cancels either supported consent dialog. No human Allow is made or fabricated.
           write({type:'extension_ui_response',id:msg.id,cancelled:true});
         }
       }
