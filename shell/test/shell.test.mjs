@@ -45,8 +45,10 @@ test("install and new/print/rpc use selected app and separated state", async t =
   const env = { TEST_CAPTURE: capture };
   call(bin, ["new"], env);
   let lines = (await fs.readFile(capture, "utf8")).trim().split("\n");
-  assert.equal(lines[0], path.join(a.home, ".pi"));
-  assert.equal(lines[1], path.join(a.home, ".pi"));
+  // macOS exposes /var under its canonical /private/var mount. These
+  // names refer to the same directory; verify the real directory identity.
+  assert.equal(await fs.realpath(lines[0]), await fs.realpath(path.join(a.home, ".pi")));
+  assert.equal(await fs.realpath(lines[1]), await fs.realpath(path.join(a.home, ".pi")));
   assert.ok(lines[2].endsWith("/.pig-agent/_comms"));
   assert.match(lines[3], /--session-dir/);
   assert.doesNotMatch(lines[3], /--continue|--session [^-\s]/);
@@ -60,7 +62,7 @@ test("install and new/print/rpc use selected app and separated state", async t =
   const transcript = path.join(a.home, "sessions/review-a.jsonl");
   await fs.writeFile(transcript, '{"type":"session"}\n');
   call(bin, ["resume", transcript], env);
-  assert.ok((await fs.readFile(capture, "utf8")).includes("--session " + transcript));
+  assert.ok((await fs.readFile(capture, "utf8")).includes("--session " + await fs.realpath(transcript)));
   assert.throws(() => call(bin, ["resume", "/tmp/not-this-agent.jsonl"], env));
   assert.ok((await fs.readdir(path.join(a.home, "sessions"))).includes("review-a.jsonl"));
 });
