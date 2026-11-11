@@ -3,7 +3,7 @@ name: agent-shell
 on:
   pull_request:
   push:
-    branches: ['feat/reusable-agent-shell']
+    branches: ['main']
   workflow_dispatch:
 
 permissions:
