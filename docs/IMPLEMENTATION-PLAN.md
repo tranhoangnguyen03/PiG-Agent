@@ -1,6 +1,6 @@
 # Shell-first implementation and acceptance plan
 
-Status: reference shell implemented in [PR #2](https://github.com/tranhoangnguyen03/PiG-Agent/pull/2), native joint-host compatibility still being qualified. The compiled Reviewer is **not** a prerequisite for shell readiness.
+Status: the reusable native shell was implemented in merged-to-feature-branch [PR #2](https://github.com/tranhoangnguyen03/PiG-Agent/pull/2) and assembled in [parent PR #1](https://github.com/tranhoangnguyen03/PiG-Agent/pull/1). Pinned Linux/macOS build and smoke evidence is available, while real-model/human cross-home acceptance remains tracked by [pi-comms #35](https://github.com/tranhoangnguyen03/pi-comms/issues/35). The compiled Reviewer is **not** a prerequisite for the generic shell.
 
 ## 1. Establish the complete reference shell
 
@@ -21,7 +21,7 @@ The first smoke covers **installation, registration and headless sessions** only
 
 - [pi-bro compatibility issue](https://github.com/tranhoangnguyen03/pi-bro/issues/177): PiG 0.5.3 real TUI and backends
 - [pi-flow-external compatibility issue](https://github.com/tranhoangnguyen03/pi-flow-external/issues/112): real delegation, UI, supervision and external auth
-- [pi-comms shared broker PR](https://github.com/tranhoangnguyen03/pi-comms/pull/34): one opt-in same-user broker for separate private agent homes
+- [pi-comms shared broker PR #40](https://github.com/tranhoangnguyen03/pi-comms/pull/40): merged M4-based shared broker for separate private agent homes; real three-TUI acceptance remains [issue #35](https://github.com/tranhoangnguyen03/pi-comms/issues/35)
 
 Keep main Pi/agent messaging independent of pi-flow's external CLI delegation. Do not copy or fork extensions inside this repo for a workaround. Update pinned commits only after running the relevant host checks.
 
