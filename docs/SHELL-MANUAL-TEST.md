@@ -22,6 +22,45 @@ Build on your operating system from the exact tested head of [parent PR #1](http
 
 The shell provides a stable terminal launcher now. Signed/notarized click-to-install and a desktop icon are not yet part of this preview.
 
+## Final parent-PR acceptance: main Pi ↔ two installed PiG agents
+
+**Operator task — NOT RUN:** this requires real TUI terminals, working model access and a person responding to the Pi consent dialog. The [two-home RPC test](https://github.com/tranhoangnguyen03/PiG-Agent/pull/9) deliberately *cancels* first-contact approval; it cannot establish the real human-approved exchange. Complete this check on the **exact current parent PR #1 shell artifact**, not on a historical preview.
+
+Use the same verified macOS ARM64 or Linux x64 archive for **two distinct installs**. The unpacked archive must contain `bundle/shell-reference`. Choose a temporary lab location and record the archive hash, shell build ID, source head and its embedded Comms source pin before starting.
+
+```sh
+export LAB="$(mktemp -d)"
+export PI_COMMS_BROKER_DIR="$LAB/shared-comms"
+# From the directory containing the *verified*, extracted release:
+./bundle/shell-reference install --home "$LAB/pig-a"
+./bundle/shell-reference install --home "$LAB/pig-b"
+"$LAB/pig-a/bin/shell-reference" doctor
+"$LAB/pig-b/bin/shell-reference" doctor
+```
+
+Then open **three separate interactive terminals**, all inheriting the identical absolute `PI_COMMS_BROKER_DIR`. Native main Pi must load the same `pi-comms 0.2.0` candidate as the two shell installations.
+
+```sh
+# Terminal 1: existing native main Pi, with pi-comms 0.2.0 installed
+PI_COMMS_BROKER_DIR="$PI_COMMS_BROKER_DIR" pi
+# Terminal 2: installed specialist A
+PI_COMMS_BROKER_DIR="$PI_COMMS_BROKER_DIR" "$LAB/pig-a/bin/shell-reference" new
+# Terminal 3: installed specialist B
+PI_COMMS_BROKER_DIR="$PI_COMMS_BROKER_DIR" "$LAB/pig-b/bin/shell-reference" new
+```
+
+With the three models signed in, run this owner journey:
+
+1. In main Pi: **"Ask specialist A to review the retry code, read-only. Keep the request linked, answer a clarification if needed, and report the final finding."** Select the actual A session ID if there is ambiguity. Approve once in the *real* UI with **Allow & remember**. Confirm the **same send** continues, without a second prompt or resending the work.
+2. In specialist A, have it ask a meaningful clarification, then answer it in main Pi. A must send a final `complete` report linked to the original request. Main Pi's `comms_inspect` must show the original request, return handles, clarification and final report; the peer's report must not be presented as requester acceptance.
+3. In specialist A, repeat with specialist B. Its separate pair needs a separate owner approval; main Pi's A–B approval must not grant A–C permission by accident. Test an explicit **Decline/Esc** on a previously unapproved pair as a separate check.
+4. Pause A; send an eligible message while its model is busy or a human draft is present; Resume and check that the draft was not overwritten. Revoke a pair, attempt another send, and verify no delivery. Check Stop against current work and a later incoming request.
+5. Save the exact PiG A session; send approved asynchronous offline mail to its exact ID, restart the shared broker, and resume that **same saved** PiG session. Confirm the saved receipt, no same-name substitution, and no duplicate work. Keep `comms_ask` live-only. New sessions have new identities and no inherited grant.
+
+**Record PASS/FAIL/NOT RUN**, tested OS/host versions, exact session IDs in **local private notes only**, package source/archives (SHA256), count of owner consent dialogs, original request/reply IDs, `comms_inspect` results, observed model wakeups and manual extra prompts. Redact transcripts before sharing GitHub evidence. A passing score requires zero unapproved sends, zero unintended duplicate work and no untruthful claims of completion. A build, command listing or synthetic RPC refusal does not meet this requirement.
+
+For the detailed negative cases and evidence ledger use [pi-comms issue #35](https://github.com/tranhoangnguyen03/pi-comms/issues/35) and its [cross-home guide](https://github.com/tranhoangnguyen03/pi-comms/blob/main/docs/PIG-CROSS-HOME-QUALIFICATION.md).
+
 ## Test pi-bro on the actual PiG TUI
 
 - Open `/bro config`; select a backend available on this machine. Bro's default is not guaranteed to be your PiG model.
