@@ -54,6 +54,8 @@ jobs:
         run: node shell/build.mjs
       - name: Real PiG package and RPC smoke
         run: node shell/smoke.mjs dist/shell/bundle
+      - name: Two installed PiG RPC hosts, shared broker, no unapproved send
+        run: node shell/comms-rpc-smoke.mjs dist/shell/bundle
       - name: Attach release and smoke report
         if: always()
         uses: actions/upload-artifact@v4
@@ -63,5 +65,6 @@ jobs:
             dist/shell/*.tar.gz
             dist/shell/*.sha256
             dist/shell/smoke-report.json
+            dist/shell/comms-rpc-report.json
           if-no-files-found: warn
           retention-days: 14
