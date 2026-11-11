@@ -2,7 +2,7 @@
 
 **Status:** Manual qualification steps, not a claim that they passed. The current preview bundles the real PiG runtime and all three extensions. Native CI checks the package, commands, some model tools, and separate sessions. These steps test the **interactive behavior that CI cannot establish**.
 
-Build on your operating system using the exact pinned checkout in [PR #2](https://github.com/tranhoangnguyen03/PiG-Agent/pull/2) or download that commit's native GitHub Actions artifact. Do not use a passing artifact from a different commit as evidence.
+Build on your operating system from the exact tested head of [parent PR #1](https://github.com/tranhoangnguyen03/PiG-Agent/pull/1), which contains the previously merged shell PR #2 and the later Flow/Comms pin fixes. Or download **that exact head's** Linux x64/macOS ARM64 CI artifact. Do not use an earlier preview from PR #2 as evidence for the current shell. Record the source SHA, actual CI merge checkout, role build ID, archive SHA256, PiG/Node/extension versions and OS before testing. This guide does not claim that any human-approved three-TUI journey already passed.
 
 ## Start the standalone shell
 
