@@ -40,4 +40,6 @@ This repo does not replace PiG's TUI, implement another peer transport, own a sh
 
 The catalogue and native desktop installers are still in progress. Actual credentials are never public release content. Connect model access in each installed home; external CLI accounts may still be managed by their own host tools until explicitly scoped and qualified.
 
-See [the shell PR](https://github.com/tranhoangnguyen03/PiG-Agent/pull/2) for build evidence and unresolved compatibility work.
+The full shell and catalogue foundation are tracked in [parent PR #1](https://github.com/tranhoangnguyen03/PiG-Agent/pull/1). The native shell uses pinned [pi-comms 0.2.0](https://github.com/tranhoangnguyen03/pi-comms/releases/tag/v0.2.0) and the merged Flow and Bro sources. The remaining owner-approved cross-home Pi↔PiG↔PiG test is tracked in [pi-comms issue #35](https://github.com/tranhoangnguyen03/pi-comms/issues/35). A passing package smoke test does not imply that interactive handoff, actual account identity or external CLI billing has been qualified.
+
+**Release status:** this is a source-backed native preview, not a signed desktop distribution. Merging the shell foundation does not certify the real-model/human-approval journey, account selection or paid external CLI delegation. See [manual acceptance](docs/SHELL-MANUAL-TEST.md) before describing a specific downloaded artifact as ready for normal users.
