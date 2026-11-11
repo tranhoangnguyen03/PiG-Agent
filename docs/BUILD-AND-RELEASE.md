@@ -1,6 +1,6 @@
 # Build and release design
 
-Status: proposed workflow. The existing Engineering builder is the tested reference; a general PiG-Agent packager and desktop installer are still to be built.
+Status: **partially implemented** in [PiG-Agent PR #1](https://github.com/tranhoangnguyen03/PiG-Agent/pull/1). The generic `shell/` build already produces versioned source-pinned Linux x64 and macOS ARM64 native **terminal** archives, an installed private home, a stable CLI, exact session resume and compatible rollback, with CI inventory/packaging checks. The catalogue import, signed/notarized desktop installer, curated public release and complete human-model qualification described below are still proposals, **not shipped features**. The separate Engineering builder remains historical reference evidence.
 
 ## Curate the whole suite
 
