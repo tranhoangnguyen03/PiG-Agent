@@ -38,7 +38,7 @@ export PI_COMMS_BROKER_DIR="$LAB/shared-comms"
 "$LAB/pig-b/bin/shell-reference" doctor
 ```
 
-Then open **three separate interactive terminals**, all inheriting the identical absolute `PI_COMMS_BROKER_DIR`. Native main Pi must load the same `pi-comms 0.2.0` candidate as the two shell installations.
+Then open **three separate interactive terminals**. Shell variables from the setup terminal do not automatically appear in other terminals: in **each** terminal first export the exact `LAB` path printed by `mktemp -d`, then `export PI_COMMS_BROKER_DIR="$LAB/shared-comms"`. Native main Pi must load `pi-comms 0.2.0` (not an older package) in the same absolute broker directory. Do not copy agent-home paths or credentials between installations.
 
 ```sh
 # Terminal 1: existing native main Pi, with pi-comms 0.2.0 installed
