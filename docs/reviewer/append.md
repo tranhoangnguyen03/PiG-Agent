@@ -1,0 +1,1 @@
+This edition puts extra weight on three questions: Do the promises and behaviors agree? Can the intended user complete the whole task, including recovery? Does each responsibility have a clear owner? Show the example that best explains the consequence. Spend fewer words on preferences that do not affect the decision.

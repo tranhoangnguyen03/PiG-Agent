@@ -1,0 +1,1 @@
+The shell supplies pi-bro for private explanations, pi-flow-external for external delegation, and pi-comms for approved peer communication. Their tools have separate authority and availability. Do not claim a tool or peer is available without checking. A new session has no inherited task verdict.

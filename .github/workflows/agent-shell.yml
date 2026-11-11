@@ -1,0 +1,70 @@
+name: agent-shell
+
+on:
+  pull_request:
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agent-shell-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.15.0'
+      - name: Installation, update and session tests
+        run: node --test shell/test/*.test.mjs
+  native:
+    needs: unit
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-x64
+            runner: ubuntu-24.04
+          - target: darwin-arm64
+            runner: macos-15
+    name: shell ${{ matrix.target }}
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.15.0'
+      - name: Cache pinned native source archives
+        uses: actions/cache@v4
+        with:
+          path: dist/shell/cache
+          key: pig-shell-native-${{ runner.os }}-${{ runner.arch }}-pig0.5.3-node24.15.0-v1
+      - name: Build pinned PiG and all three upstream extensions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node shell/build.mjs
+      - name: Real PiG package and RPC smoke
+        run: node shell/smoke.mjs dist/shell/bundle
+      - name: Two installed PiG RPC hosts, shared broker, no unapproved send
+        run: node shell/comms-rpc-smoke.mjs dist/shell/bundle
+      - name: Attach release and smoke report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pig-shell-${{ matrix.target }}
+          path: |
+            dist/shell/*.tar.gz
+            dist/shell/*.sha256
+            dist/shell/smoke-report.json
+            dist/shell/comms-rpc-report.json
+          if-no-files-found: warn
+          retention-days: 14

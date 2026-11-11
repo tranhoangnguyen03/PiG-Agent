@@ -1,0 +1,73 @@
+{
+  "pig": {
+    "version": "0.5.3",
+    "source": "https://github.com/MichaelKinsy/PiG",
+    "archives": {
+      "linux-x64": {
+        "name": "pig-0.5.3-linux-amd64.tar.gz",
+        "sha256": "1e45e5e591a06d087587d5f09d2b6d61673a1e262cb2609e6189defffd5ae7ec"
+      },
+      "darwin-arm64": {
+        "name": "pig-0.5.3-darwin-arm64.tar.gz",
+        "sha256": "b243e00305e2c7d3d5de12743bb4654cf6324a6282b0c2e0671cc29bfbde3a99"
+      },
+      "darwin-x64": {
+        "name": "pig-0.5.3-darwin-amd64.tar.gz",
+        "sha256": "1a836381d46ca14e72c9b28e4d33c247de115cf4f980e4879587c3fa4ff4387a"
+      }
+    }
+  },
+  "node": {
+    "version": "24.15.0",
+    "archives": {
+      "linux-x64": {
+        "name": "node-v24.15.0-linux-x64.tar.gz",
+        "sha256": "44836872d9aec49f1e6b52a9a922872db9a2b02d235a616a5681b6a85fec8d89"
+      },
+      "darwin-arm64": {
+        "name": "node-v24.15.0-darwin-arm64.tar.gz",
+        "sha256": "372331b969779ab5d15b949884fc6eaf88d5afe87bde8ba881d6400b9100ffc4"
+      },
+      "darwin-x64": {
+        "name": "node-v24.15.0-darwin-x64.tar.gz",
+        "sha256": "ffd5ee293467927f3ee731a553eb88fd1f48cf74eebc2d74a6babe4af228673b"
+      }
+    }
+  },
+  "extensions": [
+    {
+      "id": "bro",
+      "repository": "https://github.com/tranhoangnguyen03/pi-bro.git",
+      "commit": "738e69f6f7cba6f828b27859c172bcf69100e829",
+      "entry": "src/bro.ts",
+      "package": "pi-bro",
+      "version": "0.36.1",
+      "devBuild": false,
+      "skills": []
+    },
+    {
+      "id": "external",
+      "repository": "https://github.com/tranhoangnguyen03/pi-flow-external.git",
+      "commit": "8751fa24b9915c3201e23b4557df5a5fa593f9bc",
+      "entry": "index.ts",
+      "package": "@tranhoangnguyen0310/pi-flow-external",
+      "version": "6.3.0-external.1",
+      "devBuild": false,
+      "skills": [
+        "skills/pi-flow-orchestration"
+      ]
+    },
+    {
+      "id": "comms",
+      "repository": "https://github.com/tranhoangnguyen03/pi-comms.git",
+      "commit": "b96754b8f95a707bf4a640650f50c95bdb5f19ee",
+      "entry": "dist/extension.js",
+      "package": "pi-comms",
+      "version": "0.2.0",
+      "devBuild": true,
+      "skills": [
+        "skills"
+      ]
+    }
+  ]
+}
